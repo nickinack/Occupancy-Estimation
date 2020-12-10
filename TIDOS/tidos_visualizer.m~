@@ -1,0 +1,43 @@
+
+clc; 
+close all;
+
+
+str = 'data000001.json';
+
+
+
+json = fileread(str);
+
+struct = jsondecode(json);
+
+values=struct.Frames_B;
+
+data=zeros(24,32,16);
+
+for k=1:16
+
+    for j=1:24
+
+        data(j,:,k)=values(k,32*(j-1)+1:32*j);
+
+    end
+    
+end
+
+
+figure_title=['Second= ',num2str(sec),'  Frame= ',num2str(frame)];
+figure('Name',figure_title,'NumberTitle','off')
+ax1=subplot(1,1,1);
+imagesc(data(:,:,frame))
+colormap(ax1, jet)
+ax1.FontSize=16;
+daspect([1 1 1])
+c1=colorbar;
+c1.Ticks=([15 20 28 35 40]);
+c1.TickLabels={'15?C','20?C','28?C','35?C','40?C'};
+caxis([15 40])
+set(gca,'FontSize',18)
+
+
+
