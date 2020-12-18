@@ -15,6 +15,10 @@ event = np.zeros((235,24,32,16))
 
 #For the frames, calculate the running average
 
+fg = []
+cnt = np.zeros((236,16))
+bg = []
+maxi = -1
 for l in range(0,235):
     start = 0
     if l == 0:
@@ -22,20 +26,28 @@ for l in range(0,235):
     for k in range(start,16):
         for i in range(0,24):
             for j in range(0,32):
-                mean[l,i,j,k] = alpha*data[l,i,j,k]
                 if k==0:
-                    mean[l,i,j,k] = mean[l,i,j,k] + mean[l-1,i,j,15]*(1-alpha)
+                    mean[l,i,j,k] = alpha*data[l,i,j,k] + mean[l-1,i,j,15]*(1-alpha)    ## Mean if k==0 and l!=0
                 else:
-                    mean[l,i,j,k] = mean[l,i,j,k] + mean[l,i,j,k-1]*(1-alpha)
-                gmean[l,i,j,k] = data[l,i,j,k] - mean[l,i,j,k]
-                gp[l,i,j,k] = sc.norm(gmean[l,i,j,k] , sigma).pdf(data[l,i,j,k])
-                if gp[l,i,j,k]<n:
-                    event[l,i,j,k] = 0
-                else:
-                    event[l,i,j,k] = 1
-                print(l,k,i,j)
+                    mean[l,i,j,k] = alpha*data[l,i,j,k] + mean[l,i,j,k-1]*(1-alpha)     ## Mean if k!=0 and l!=0
 
-plt.imshow(event[4,:,:,10], cmap='Greys',  interpolation='nearest')
+                gp[l,i,j,k] = gaussian_pdf(data[l,i,j,k] , sigma , mean[l,i,j,k])       ## Find the gaussian PDF 
+                if gp[l,i,j,k]<n:                                                       ## Process is foreground
+                    event[l,i,j,k] = 0
+                    fg.append((data[l,i,j,k] , mean[l,i,j,k]))
+                    cnt[l,k] = cnt[l,k] + 1
+                    if k!=0:
+                        mean[l,i,j,k] = mean[l,i,j,k-1]                                 ## Update the mean if the process is foreground
+                    else:
+                        mean[l,i,j,k] = mean[l-1,i,j,15]
+
+                else:
+                    event[l,i,j,k] = 1   
+                    bg.append((data[l,i,j,k] , mean[l,i,j,k]))                          ## Process is Background
+                if gp[l,i,j,k] > maxi:
+                    maxi = gp[l,i,j,k]
+
+
         
 
 
