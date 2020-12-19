@@ -7,7 +7,7 @@ import os
 
 # Select the setting
 store_list = []
-path = '../TIDOS/Data/Edge_Cases/edge_cases_sensor_1/'
+path = '../TIDOS/Data/High_Activity/high_activity_sensor_1/'
 for file in os.listdir(path):
     f_name = path + file
     input_file = open(f_name)
