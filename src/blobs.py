@@ -55,17 +55,37 @@ def blob_detector(i, j, visited, color, second, frame):
   
     return blob_size
 
-visited = np.zeros((24,32))
 blobs = []
-record = []
-color = 1
-for i in range(0,24):
-    for j in range(0,32):
-        size = blob_detector(i,j,visited,color,210,15)
-        if size>100:
-            blobs.append((i,j,size))
-            color = color+1
+for l in range(0,235):
+    for k in range(0,16):
+        if cnt[l,k] < K:
+            continue
+        record = []
+        color = 1
+        visited = np.zeros((24,32))
+        for i in range(0,24):
+            for j in range(0,32):
+                size = blob_detector(i,j,visited,color,l,k)
+                if size>=L:
+                    color = color + 1
+        blobs.append((l,k,color-1,record))
         
 
-print("Blobs" , blobs)
-print("Record Shape" , np.shape(record))
+input1 = int(input("Enter second"))
+input2 = int(input("Enter frame"))
+
+print("----------------------------------------------")
+print("-------------Blob information-----------------")
+print("Second: " , input1)
+print("Frame: ", input2)
+flag = -1
+for i in range(len(blobs)):
+    if blob[i][0] == input1 and blob[i][1] == input2:
+        flag = i
+
+if flag == -1:
+    print("No blobs in the requested frame!")
+else:
+    print("Number of Blobs: " , blob[flag][2])
+    print("Blob indices along with their color: " , blob[flag][3])
+print("----------------------------------------------")

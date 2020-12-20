@@ -81,11 +81,3 @@ for l in range(0,235):
 #axs[2,2].imshow(mrf_event[141,:,:,2] , cmap='Greys')
 #End Testing
 
-
-
-        
-
-
-        
-
-
