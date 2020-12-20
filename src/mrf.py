@@ -3,6 +3,9 @@ import scipy.stats as sc
 
 #Implement the RGA BS algorithm
 #Initialise the constants
+
+print("Markov Random Field \n")
+
 def gaussian_pdf(x , sigma , mu):
     pdf1 = (1/(sigma*np.sqrt(2*np.pi)))
     pdf2 = np.exp(-0.5*((x-mu)/sigma)**2)
@@ -132,22 +135,31 @@ for l in range(0,235):
                     mrf_event[l,i,j,k] = 1
                 diff[l,i,j,k] = ratio-mrf
 
-for l in range(0,235):
-    for k in range(0,16):
-        if cnt[l,k] > 500:
-            print(l,k)
+# for l in range(0,235):
+#    for k in range(0,16):
+#        if cnt[l,k] > 500:
+#            print(l,k)
 
 #Testing
-#fig, axs = plt.subplots(3, 3)
-#axs[0,0].imshow(mrf_event[140,:,:,9] , cmap='Greys')
-#axs[1,0].imshow(mrf_event[140,:,:,10] , cmap='Greys')
-#axs[2,0].imshow(mrf_event[140,:,:,11] , cmap='Greys')
-#axs[0,1].imshow(mrf_event[140,:,:,12] , cmap='Greys')
-#axs[1,1].imshow(mrf_event[140,:,:,13] , cmap='Greys')
-#axs[2,1].imshow(mrf_event[140,:,:,14] , cmap='Greys')
-#axs[0,2].imshow(mrf_event[140,:,:,15] , cmap='Greys')
-#axs[1,2].imshow(mrf_event[141,:,:,1] , cmap='Greys')
-#axs[2,2].imshow(mrf_event[141,:,:,2] , cmap='Greys')
+#def visualize(second):
+#    fig, axs = plt.subplots(4, 4)
+#    frame = 0
+#    axs[0,0].imshow(mrf_event[second,:,:,frame] , cmap='Greys')
+#    axs[1,0].imshow(mrf_event[second,:,:,frame+1] , cmap='Greys')
+#    axs[2,0].imshow(mrf_event[second,:,:,frame+2] , cmap='Greys')
+#    axs[3,0].imshow(mrf_event[second,:,:,frame+3] , cmap='Greys')
+#    axs[0,1].imshow(mrf_event[second,:,:,frame+4] , cmap='Greys')
+#    axs[1,1].imshow(mrf_event[second,:,:,frame+5] , cmap='Greys')
+#    axs[2,1].imshow(mrf_event[second,:,:,frame+6] , cmap='Greys')
+#    axs[3,1].imshow(mrf_event[second,:,:,frame+7] , cmap='Greys')
+#    axs[0,2].imshow(mrf_event[second,:,:,frame+8] , cmap='Greys')
+#    axs[1,2].imshow(mrf_event[second,:,:,frame+9] , cmap='Greys')
+#    axs[2,2].imshow(mrf_event[second,:,:,frame+10] , cmap='Greys')
+#   axs[3,2].imshow(mrf_event[second,:,:,frame+11] , cmap='Greys')
+#    axs[0,3].imshow(mrf_event[second,:,:,frame+12] , cmap='Greys')
+#    axs[1,3].imshow(mrf_event[second,:,:,frame+13] , cmap='Greys')
+#    axs[2,3].imshow(mrf_event[second,:,:,frame+14] , cmap='Greys')
+#    axs[3,3].imshow(mrf_event[second,:,:,frame+15] , cmap='Greys')
 #End Testing
 
 

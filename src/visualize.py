@@ -5,6 +5,7 @@ import seaborn as sns
 import json
 import os
 
+print("Visualizer \n")
 # Select the setting
 store_list = []
 path = '../TIDOS/Data/High_Activity/high_activity_sensor_1/'

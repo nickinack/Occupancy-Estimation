@@ -9,6 +9,12 @@ from mrf import *
 
 # Blob detection
 # Use Recursive Blob Detection method (Similar to DBSCAN)
+print("Blob Calculation \n")
+
+# DBSCAN Constants
+K = 100
+L = 100
+
 def blob_detector(i, j, visited, color, second, frame):
     '''
     Given a frame after BS, detects "blobs"
@@ -71,8 +77,8 @@ for l in range(0,235):
         blobs.append((l,k,color-1,record))
         
 
-input1 = int(input("Enter second"))
-input2 = int(input("Enter frame"))
+input1 = int(input("Enter second: "))
+input2 = int(input("Enter frame: "))
 
 print("----------------------------------------------")
 print("-------------Blob information-----------------")
@@ -80,12 +86,12 @@ print("Second: " , input1)
 print("Frame: ", input2)
 flag = -1
 for i in range(len(blobs)):
-    if blob[i][0] == input1 and blob[i][1] == input2:
+    if blobs[i][0] == input1-1 and blobs[i][1] == input2-1:
         flag = i
 
 if flag == -1:
     print("No blobs in the requested frame!")
 else:
-    print("Number of Blobs: " , blob[flag][2])
-    print("Blob indices along with their color: " , blob[flag][3])
+    print("Number of Blobs: " , blobs[flag][2])
+    print("Blob indices along with their color: " , blobs[flag][3])
 print("----------------------------------------------")

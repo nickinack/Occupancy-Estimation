@@ -9,6 +9,8 @@ def gaussian_pdf(x , sigma , mu):
 #Implement the RGA BS algorithm
 #Initialise the constants
 
+print("Basic Background Subtraction \n")
+
 n = 0.01
 mean = np.zeros((235,24,32,16))
 mean[0,:,:,0] = np.copy(data[0,:,:,0])
@@ -18,6 +20,10 @@ M = 0
 gmean = np.zeros((235,24,32,16))
 gp = np.zeros((235,24,32,16))
 event = np.zeros((235,24,32,16))
+maxi = np.zeros((235,24,32,16))
+mini = np.zeros((235,24,32,16))
+mini[0,:,:,0] = data[0,:,:,0]
+maxi[0,:,:,0] = data[0,:,:,0]
 
 for i in range(0,1):
     for j in range(0,1):
