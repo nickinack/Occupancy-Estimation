@@ -1,7 +1,13 @@
 from visualize import *
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import json
+import os
 import scipy.stats as sc
 
-#Implement the RGA BS algorithm
+#Implement the MRF algorithm
 #Initialise the constants
 
 print("Markov Random Field \n")
@@ -44,7 +50,9 @@ maxi[0,:,:,0] = data[0,:,:,0]
 theta = 0.015
 gamma = 0.2
 
-#For the frames, calculate the running average
+#For the frames, calculate the running gaussian average as we did in the baseline algorithm
+#For each pixel, if the gaussian probability, gp < n , the pixel is foreground.
+#If the pixel is foreground, we represent it as a white pixel in event graph
 
 for l in range(0,235):
     start = 0
@@ -75,10 +83,16 @@ for l in range(0,235):
                     event[l,i,j,k] = 1   
                     bg.append((data[l,i,j,k] , mean[l,i,j,k]))                              ## Process is Background
 
+#Initialise MRF lists
 
 diff = np.zeros((235,24,32,16))
 mrf_event = np.zeros((235,24,32,16))
 mrf_event[0,:,:,0] = 1
+
+# Use the markov random field in order to remove outlier points
+# Use the BS algorithm and check the neighbouring events
+# Depending on the neighbours, weigh the MRF accordingly
+
 for l in range(0,235):
     for k in range(0,16):
         for i in range(0,24):

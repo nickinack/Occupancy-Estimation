@@ -1,6 +1,13 @@
 from visualize import *
 import scipy.stats as sc
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import json
+import os
 
+# Scipy's complexity is higher due to preprocessing
 def gaussian_pdf(x , sigma , mu):
     pdf1 = (1/(sigma*np.sqrt(2*np.pi)))
     pdf2 = np.exp(-0.5*((x-mu)/sigma)**2)
@@ -42,8 +49,10 @@ fg = []
 cnt = np.zeros((236,16))
 bg = []
 
-#For the frames, calculate the running average
-
+#For the frames, calculate the running gaussian average
+#For each pixel, if the gaussian probability, gp < n , the pixel is foreground.
+#If the pixel is foreground, we represent it as a white pixel in event graph
+#We use the baseline algorithm in order to develop the MRF algorithm in order to remove outlier foregrounds.
 
 for l in range(0,235):
     start = 0
@@ -76,14 +85,14 @@ for l in range(0,235):
 
 #Testing
 #fig, axs = plt.subplots(3, 3)
-#axs[0,0].imshow(mrf_event[140,:,:,9] , cmap='Greys')
-#axs[1,0].imshow(mrf_event[140,:,:,10] , cmap='Greys')
-#axs[2,0].imshow(mrf_event[140,:,:,11] , cmap='Greys')
-#axs[0,1].imshow(mrf_event[140,:,:,12] , cmap='Greys')
-#axs[1,1].imshow(mrf_event[140,:,:,13] , cmap='Greys')
-#axs[2,1].imshow(mrf_event[140,:,:,14] , cmap='Greys')
-#axs[0,2].imshow(mrf_event[140,:,:,15] , cmap='Greys')
-#axs[1,2].imshow(mrf_event[141,:,:,1] , cmap='Greys')
-#axs[2,2].imshow(mrf_event[141,:,:,2] , cmap='Greys')
+#axs[0,0].imshow(event[140,:,:,9] , cmap='Greys')
+#axs[1,0].imshow(event[140,:,:,10] , cmap='Greys')
+#axs[2,0].imshow(event[140,:,:,11] , cmap='Greys')
+#axs[0,1].imshow(event[140,:,:,12] , cmap='Greys')
+#axs[1,1].imshow(event[140,:,:,13] , cmap='Greys')
+#axs[2,1].imshow(event[140,:,:,14] , cmap='Greys')
+#axs[0,2].imshow(event[140,:,:,15] , cmap='Greys')
+#axs[1,2].imshow(event[141,:,:,1] , cmap='Greys')
+#axs[2,2].imshow(event[141,:,:,2] , cmap='Greys')
 #End Testing
 

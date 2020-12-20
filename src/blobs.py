@@ -9,11 +9,16 @@ from mrf import *
 
 # Blob detection
 # Use Recursive Blob Detection method (Similar to DBSCAN)
+
 print("Blob Calculation \n")
 
-# DBSCAN Constants
+# Radius and Minimum foreground count
 K = 100
 L = 100
+
+# Returns unexplored blobs in a frame
+# If the blob size > 100, we give the blob a color and index each of the positions of the blob
+# The record is then stored in a list for further use
 
 def blob_detector(i, j, visited, color, second, frame):
     '''
@@ -60,6 +65,8 @@ def blob_detector(i, j, visited, color, second, frame):
         connected = connected + 1
   
     return blob_size
+
+#For the given dataset, calculate the blob information and store them
 
 blobs = []
 for l in range(0,235):
