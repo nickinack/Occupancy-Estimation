@@ -40,35 +40,5 @@ for i in range(0,blob_frames):
 
 # In the next section, we analyse the movements of these centroids (between two consecutive frames) and perform relative centroid indexing
 
-entry = []
-exits = []
-count = 0
-new_blob = 0
-# Start the counting process
-for i in range(1,len(centroids)):
-    if np.abs(centroids[i][0]-centroids[i-1][0] >=1 ):
-        if not (centroids[i][0] == 0 and centroids[i-1][0] + 1 and centroids[i][1] == 0 and centroids[i-1][1] == 15):
-             '''
-             New blob is born; track it
-             '''
-             pass
-           
-    if centroids[i-1][2] < centroids[i][2]:
-        '''
-        New blob is incoming while the existing blob is present / New blob disintegrated from the previous blobs; map accordingly
-        '''
-        pass
 
-    if centroids[i-1][2] == centroids[i][2]:
-        '''
-        The number of blobs are the same, map accordingly
-        '''
-        pass
-
-    if centroids[i-1][2] >= centroids[i-1][1]:
-        '''
-        Some of the blobs have passes , count their entry/exit ; map accordingly
-        '''
-        pass
-        
         
