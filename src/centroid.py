@@ -36,7 +36,8 @@ for i in range(0,blob_frames):
         local_centroid_y = local_centroid_y/numb
         frame_centroids.append((j , local_centroid_x , local_centroid_y))
         j = j+1
-    centroids.append((blobs[i][0],blobs[i][1],blobs[i][2],frame_centroids))
+    if np.shape(frame_centroids) != 0:
+        centroids.append((blobs[i][0],blobs[i][1],blobs[i][2],frame_centroids))
 
 # In the next section, we analyse the movements of these centroids (between two consecutive frames) and perform relative centroid indexing
 

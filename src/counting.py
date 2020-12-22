@@ -13,10 +13,9 @@ def blob_size(input1 , input2):
     '''
     flag = -1
     for i in range(len(blobs)):
-        if blobs[i][0] == input1-1 and blobs[i][1] == input2-1:
+        if blobs[i][0] == input1 and blobs[i][1] == input2:
             flag = i
     return np.shape(blobs[flag][3])[0]
-
 
 # In this section of code, we count the number of people entering and exitting in the room
 # We use the centroids calculated in the previous section in order to count the number of people
@@ -55,54 +54,55 @@ else:
 entry = []
 exits = []
 count = 0 
-unmapped = []
 
 # Start the counting process
 for i in range(1,len(centroids)):
-    if np.abs(centroids[i][0]-centroids[i-1][0] >=1 ):
-        if (not (centroids[i][0] == 0 and centroids[i-1][0] + 1 and centroids[i][1] == 0 and centroids[i-1][1] == 15)) and np.abs(centroids[i][0] - centroids[i-1][0]) >= 1:
-             '''
-             New blob(s) is/are born; track it
-             '''
-             for i in range(0 , centroids[i][2]):
-                 unmapped.append(centroids[i][2])                          # We are assuming we will be mapping every unmapped centroid in its next frame.
+    unmapped = []
+    mapped = []
+    condition = -1
+    if (not (centroids[i][0] == centroids[i-1][0] + 1 and centroids[i][1] == 0 and centroids[i-1][1] == 15)) and np.abs(centroids[i][0] - centroids[i-1][0]) >= 1:
+        '''
+        New blob(s) is/are born; track it
+        '''
+        for j in range(1 , centroids[i][2] + 1):
+            condition = 0
+            unmapped.append(j)                          # We are assuming we will be mapping every unmapped centroid in its next frame.
            
-    if centroids[i-1][2] < centroids[i][2]:
+    elif centroids[i-1][2] < centroids[i][2]:
+
         '''
         New blob is incoming while the existing blob is present / New blob disintegrated from the previous blobs; map accordingly or the centroids merged
         '''
-         if centroids[i-1][2] == 1 and centroids[i][2] > 1:
-             '''
-             Blobs may have disintegrated
-             '''
-            mapping(centroids[i] , centroids[i-1] , 1)
+        if centroids[i-1][2] == 1 and centroids[i][2] > 1:
+            '''
+            Blobs may have disintegrated
+            '''
+            condition = 1
+            mapped, unmapped = mapping(centroids[i] , centroids[i-1] , 1)
         else:
             mapped , unmapped = mapping(centroids[i] , centroids[i-1] , 2)
-        pass
-
-    if centroids[i-1][2] == centroids[i][2]:
+        
+    elif centroids[i-1][2] == centroids[i][2]:
         '''
         The number of blobs are the same, map accordingly
         '''
-        mapped = mapping(centroids[i] , centroids[i-1] , 3)[0]
-        pass
+        condition = 3
+        mapped,unmapped = mapping(centroids[i] , centroids[i-1] , 3)
 
-    if centroids[i-1][2] > centroids[i-1][1]:
+
+    elif centroids[i-1][2] > centroids[i][2]:
         '''
         Some of the blobs may have passed , count their entry/exit ; map accordingly
         '''
-
         if centroids[i][2] == 1 and centroids[i-1][2] > 1:
-            mapping(centroids[i] , centroids[i-1] , 4)
+            condition = 4
+            mapped,unmapped = mapping(centroids[i] , centroids[i-1] , 4)
 
         else:
-            mapping(centroids[i] , centroids[i-1] , 5)
-        pass
-
-        print(mapped)
-
-        
-# Mapping functions
+            condition = 5
+            mapped,unmapped = mapping(centroids[i] , centroids[i-1] , 5)
+     
+    
 
 def mapping(centroid1 , centroid2 , condition):
     '''
@@ -111,18 +111,16 @@ def mapping(centroid1 , centroid2 , condition):
 
     map = []
     unmapped = []
-
     if condition == 1:
         '''
-        Blobs may have disintegrate
+        Blobs may have disintegrated
         '''
-        if np.abs(blob_size(centroid1[0] , centroid1[1]]) - blob_size(centroid2[0] , centroid2[1])) <= 50:
+        if np.abs(blob_size(centroid1[0] , centroid1[1]) - blob_size(centroid2[0] , centroid2[1])) <= 50:
             '''
             Blobs have merged
             '''
-
-            for j in range(1,len(centroid1)):
-                map.append((i , 1))
+            for j in range(1,centroid1[2] + 1):
+                map.append((j , 1))
         else:
             condition = 2
 
@@ -130,21 +128,21 @@ def mapping(centroid1 , centroid2 , condition):
         '''
         New blob born when blobs are present
         '''
-        temp = np.copy(centroid2)
-        temp[3] = list(temp[3])
-        for i in range(1,centroid1[2]):
+        visited = np.zeros(centroid2[2])
+        for i in range(1,centroid1[2] + 1):
             mini = 1e9+7
             map_cur = i
             map_prev = -1
-            for j in range(1,temp[2]):
-                dist = (centroid1[3][i-1][0]-temp[3][j-1][2])**2 + (centroid1[3][i-1][1]-temp[3][j-1][1])**2
-                if mini>dist:
-                    mini = dist
-                    map_prev = j         
-            temp[3].remove(temp[3][map_prev-1])
+            for j in range(1,centroid2[2]+1):
+                if visited[j-1] == 0:
+                    dist = (centroid1[3][i-1][0]-centroid2[3][j-1][0])**2 + (centroid1[3][i-1][1]-centroid2[3][j-1][1])**2
+                    if mini>dist:
+                        mini = dist
+                        map_prev = j
+            visited[map_prev-1] = 1
             map.append((map_cur , map_prev))
 
-        for i in range(1,centroid1[2]):
+        for i in range(1,centroid1[2] + 1):
             found = -1
             for j in map:
                 if i == j[0]:
@@ -156,18 +154,18 @@ def mapping(centroid1 , centroid2 , condition):
         '''
         The number of blobs are the same
         '''
-        temp = np.copy(centroid2)
-        temp[3] = list(temp[3])
-        for i in range(1,centroid1[2]):
+        visited = np.zeros(centroid2[2])
+        for i in range(1,centroid1[2] + 1):
             mini = 1e9+7
             map_cur = i
             map_prev = -1
-            for j in range(1,temp[2]):
-                dist = (centroid1[3][i-1][0]-temp[3][j-1][2])**2 + (centroid1[3][i-1][1]-temp[3][j-1][1])**2
-                if mini>dist:
-                    mini = dist
-                    map_prev = j
-            temp[3].remove(temp[3][map_prev-1])
+            for j in range(1,centroid2[2]+1):
+                if visited[j-1] == 0:
+                    dist = (centroid1[3][i-1][0]-centroid2[3][j-1][0])**2 + (centroid1[3][i-1][1]-centroid2[3][j-1][1])**2
+                    if mini>dist:
+                        mini = dist
+                        map_prev = j
+            visited[map_prev-1] = 1
             map.append((map_cur , map_prev))
     
     if condition == 4:
@@ -175,12 +173,12 @@ def mapping(centroid1 , centroid2 , condition):
         Some of the blobs have passed; tricky edge case. We need to comapre the size of the blobs. 
         '''
 
-        if np.abs(blob_size(centroid1[0] , centroid1[1]]) - blob_size(centroid2[0] , centroid2[1])) <= 50:
+        if np.abs(blob_size(centroid1[0] , centroid1[1]) - blob_size(centroid2[0] , centroid2[1])) <= 50:
             '''
             Blobs have merged
             '''
 
-            for j in range(1,len(centroid2)):
+            for j in range(1,centroid2[2]+1):
                 map.append((1 , j))
         
         else:
@@ -193,22 +191,21 @@ def mapping(centroid1 , centroid2 , condition):
         '''
         Blobs are dissapearing; we now find which blob diappeared 
         '''
-
-        temp = np.copy(centroid2)
-        temp[3] = list(temp[3])
-        for i in range(1,centroid1[2]):
+        visited = np.zeros(centroid2[2])
+        for i in range(1,centroid1[2] + 1):
             mini = 1e9+7
             map_cur = i
             map_prev = -1
-            for j in range(1,temp[2]):
-                dist = (centroid1[3][i-1][0]-temp[3][j-1][2])**2 + (centroid1[3][i-1][1]-temp[3][j-1][1])**2
-                if mini>dist:
-                    mini = dist
-                    map_prev = j
-            temp[3].remove(temp[3][map_prev-1])
+            for j in range(1,centroid2[2]+1):
+                if visited[j-1] == 0:
+                    dist = (centroid1[3][i-1][0]-centroid2[3][j-1][0])**2 + (centroid1[3][i-1][1]-centroid2[3][j-1][1])**2
+                    if mini>dist:
+                        mini = dist
+                        map_prev = j
+            visited[map_prev-1] = 1
             map.append((map_cur , map_prev))
 
-        for i in range(1,centroid2[2]):
+        for i in range(1,centroid2[2] + 1):
             found = -1
             for j in map:
                 if i == j[1]:
@@ -218,5 +215,3 @@ def mapping(centroid1 , centroid2 , condition):
 
     return (map , unmapped)
     
-
-
