@@ -5,10 +5,11 @@ import seaborn as sns
 import json
 import os
 
-print("Visualizer \n")
+print("Visualizer")
 # Select the setting
+
 store_list = []
-path = '../TIDOS/Data/High_Activity/high_activity_sensor_1/'
+path = '../TIDOS/Data/Lunch_Meeting_1/lunch_meeting_1_sensor_2/'
 for file in os.listdir(path):
     f_name = path + file
     input_file = open(f_name)
