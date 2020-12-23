@@ -55,6 +55,14 @@ for file in os.listdir(path):
 The achieved results indicate that typically 80-90% entry and exit events are correctly classified for scenarios with a wide range of extreme challenges, while in
 simpler, less-active scenarios even 100% correct classification can be reached.
 
+### Accuracies obtained
+
+- Lecture : 100%
+- Lunch Meeting 2 : 100%
+- Lunch Meeting 1 : 96%
+- Lunch Meeting 3 : 95%
+- Edge Cases : 80%
+
 ## Further Queries
 
 In case of any further queries, visit <a href="https://nickinack.github.io/about/"> Nickinack's webpage </a>
