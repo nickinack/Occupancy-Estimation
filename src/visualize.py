@@ -8,8 +8,8 @@ import os
 print("Visualizer")
 # Select the setting
 store_list = []
-path = '../TIDOS/Data/Edge_Cases/edge_cases_sensor_1/'
-seconds = 410
+path = '../TIDOS/Data/Lunch_Meeting_3/lunch_meeting_3_sensor_2/'
+seconds = 879
 for file in os.listdir(path):
     f_name = path + file
     input_file = open(f_name)

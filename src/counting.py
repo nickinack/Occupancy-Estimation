@@ -6,7 +6,6 @@ import seaborn as sns
 import json
 import os
 import scipy.stats as sc
-
 # In this section, we count the number of people using the mapping and centroid arrays obtained from the previously obtained centroid and mapping lists
 # We also take care of the "lingering condition over here"
 
@@ -17,6 +16,8 @@ print("Counting the number of people \n")
 # Else, if it is the latter case, the person is exitting the room
 
 entry = 0
+entry_index = []
+exit_index = []
 exit = 0
 indices = []
 prev_unmapped_index = 0
@@ -58,14 +59,18 @@ for i in range(1 , np.shape(centroids)[0]):
             prev = mapping_verbrose[i][1][j-1][1]
 
             if centroids[i][3][cur-1][1] > 16 and centroids[i-1][3][prev-1][1] < 16:
-                entry = entry + 1
+                entry_index.append(i)
                 indices.append(i)
 
             elif centroids[i][3][cur-1][1] < 16 and centroids[i-1][3][prev-1][1] > 16:
-                exit = exit + 1
+                exit_index.append(i)
                 indices.append(i)
+
+for i in indices:
+    if i in entry_index:
+        entry = entry+1
+    if i in exit_index:
+        exit = exit + 1
 print("Number of entries and exits: " , len(indices))
 print(entry,exit)
-
-
 
