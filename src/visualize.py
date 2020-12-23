@@ -7,9 +7,9 @@ import os
 
 print("Visualizer")
 # Select the setting
-
 store_list = []
-path = '../TIDOS/Data/Lunch_Meeting_1/lunch_meeting_1_sensor_2/'
+path = '../TIDOS/Data/Edge_Cases/edge_cases_sensor_1/'
+seconds = 410
 for file in os.listdir(path):
     f_name = path + file
     input_file = open(f_name)
@@ -24,8 +24,8 @@ for i in sorted_list:
     temp_list.append(i["Temperature"])
 
 # Reshape the JSON data
-data = np.zeros((235,24,32,16))
-for i in range(0,235):
+data = np.zeros((seconds,24,32,16))
+for i in range(0,seconds):
     for k in range(0,16):
         for j in range(0,24):
             data[i,j,:,k] = temp_list[i][k][32*j : 32*(j+1)]

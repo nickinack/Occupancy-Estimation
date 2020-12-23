@@ -19,16 +19,16 @@ def gaussian_pdf(x , sigma , mu):
 print("Basic Background Subtraction \n")
 
 n = 0.01
-mean = np.zeros((235,24,32,16))
+mean = np.zeros((seconds,24,32,16))
 mean[0,:,:,0] = np.copy(data[0,:,:,0])
 sigma = 0.4
 alpha = 0.0001
 M = 0
-gmean = np.zeros((235,24,32,16))
-gp = np.zeros((235,24,32,16))
-event = np.zeros((235,24,32,16))
-maxi = np.zeros((235,24,32,16))
-mini = np.zeros((235,24,32,16))
+gmean = np.zeros((seconds,24,32,16))
+gp = np.zeros((seconds,24,32,16))
+event = np.zeros((seconds,24,32,16))
+maxi = np.zeros((seconds,24,32,16))
+mini = np.zeros((seconds,24,32,16))
 mini[0,:,:,0] = data[0,:,:,0]
 maxi[0,:,:,0] = data[0,:,:,0]
 
@@ -54,7 +54,7 @@ bg = []
 #If the pixel is foreground, we represent it as a white pixel in event graph
 #We use the baseline algorithm in order to develop the MRF algorithm in order to remove outlier foregrounds.
 
-for l in range(0,235):
+for l in range(0,seconds):
     start = 0
     if l == 0:
         start = 1

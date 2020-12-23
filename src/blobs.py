@@ -69,7 +69,7 @@ def blob_detector(i, j, visited, color, second, frame):
 #For the given dataset, calculate the blob information and store them
 
 blobs = []
-for l in range(0,235):
+for l in range(0,seconds):
     for k in range(0,16):
         if cnt[l,k] < K:
             continue

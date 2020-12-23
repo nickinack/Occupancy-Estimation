@@ -19,6 +19,8 @@ print("Counting the number of people \n")
 entry = 0
 exit = 0
 indices = []
+prev_unmapped_index = 0
+cur_unmapped_index = 0
 for i in range(1 , np.shape(centroids)[0]):
 
     '''
@@ -28,7 +30,24 @@ for i in range(1 , np.shape(centroids)[0]):
         '''
         New blobs formed ; continue
         '''
-        continue
+        prev_unmapped_index = cur_unmapped_index
+        cur_unmapped_index = i
+
+        first_event = centroids[prev_unmapped_index + 1][3][0][1] - centroids[prev_unmapped_index + 2][3][0][1]
+        last_event = centroids[cur_unmapped_index - 2][3][0][1] - centroids[cur_unmapped_index - 1][3][0][1]
+
+        if (first_event < 0 and last_event > 0) or (first_event > 0 and last_event < 0) and np.abs(first_event) > 10 and np.abs(last_event) > 10:
+            '''
+            Lingering
+            '''
+            to_remove = []
+            for i in range(0,len(indices)):
+                if indices[i] >= prev_unmapped_index and indices[i] <= cur_unmapped_index:
+                    to_remove.append(i)
+            
+            for index in sorted(to_remove, reverse=True):
+                indices.remove(indices[index])
+
     else:
         '''
         Analyse the mappings
@@ -38,11 +57,15 @@ for i in range(1 , np.shape(centroids)[0]):
             cur = mapping_verbrose[i][1][j-1][0]
             prev = mapping_verbrose[i][1][j-1][1]
 
-            if centroids[i][3][cur-1][2] > 16 and centroids[i-1][3][prev-1][2] < 16:
+            if centroids[i][3][cur-1][1] > 16 and centroids[i-1][3][prev-1][1] < 16:
                 entry = entry + 1
                 indices.append(i)
 
-            elif centroids[i][3][cur-1][2] < 16 and centroids[i-1][3][prev-1][2] > 16:
+            elif centroids[i][3][cur-1][1] < 16 and centroids[i-1][3][prev-1][1] > 16:
                 exit = exit + 1
                 indices.append(i)
-print(entry , exit)
+print("Number of entries and exits: " , len(indices))
+print(entry,exit)
+
+
+

@@ -18,14 +18,14 @@ def gaussian_pdf(x , sigma , mu):
     return pdf1*pdf2
 
 n = 0.01
-mean = np.zeros((235,24,32,16))
+mean = np.zeros((seconds,24,32,16))
 mean[0,:,:,0] = np.copy(data[0,:,:,0])
 sigma = 0.4
 alpha = 0.0001
 M = 0
-gmean = np.zeros((235,24,32,16))
-gp = np.zeros((235,24,32,16))
-event = np.zeros((235,24,32,16))
+gmean = np.zeros((seconds,24,32,16))
+gp = np.zeros((seconds,24,32,16))
+event = np.zeros((seconds,24,32,16))
 
 for i in range(0,1):
     for j in range(0,1):
@@ -43,8 +43,8 @@ mean[0,:,:,0] = mean[0,:,:,0]/25
 fg = []
 cnt = np.zeros((236,16))
 bg = []
-maxi = np.zeros((235,24,32,16))
-mini = np.zeros((235,24,32,16))
+maxi = np.zeros((seconds,24,32,16))
+mini = np.zeros((seconds,24,32,16))
 mini[0,:,:,0] = data[0,:,:,0]
 maxi[0,:,:,0] = data[0,:,:,0]
 theta = 0.015
@@ -54,7 +54,7 @@ gamma = 0.2
 #For each pixel, if the gaussian probability, gp < n , the pixel is foreground.
 #If the pixel is foreground, we represent it as a white pixel in event graph
 
-for l in range(0,235):
+for l in range(0,seconds):
     start = 0
     if l == 0:
         start = 1
@@ -85,15 +85,15 @@ for l in range(0,235):
 
 #Initialise MRF lists
 
-diff = np.zeros((235,24,32,16))
-mrf_event = np.zeros((235,24,32,16))
+diff = np.zeros((seconds,24,32,16))
+mrf_event = np.zeros((seconds,24,32,16))
 mrf_event[0,:,:,0] = 1
 
 # Use the markov random field in order to remove outlier points
 # Use the BS algorithm and check the neighbouring events
 # Depending on the neighbours, weigh the MRF accordingly
 
-for l in range(0,235):
+for l in range(0,seconds):
     for k in range(0,16):
         for i in range(0,24):
             for j in range(0,32):
@@ -149,7 +149,7 @@ for l in range(0,235):
                     mrf_event[l,i,j,k] = 1
                 diff[l,i,j,k] = ratio-mrf
 
-# for l in range(0,235):
+# for l in range(0,seconds):
 #    for k in range(0,16):
 #        if cnt[l,k] > 500:
 #            print(l,k)
