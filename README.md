@@ -61,7 +61,7 @@ simpler, less-active scenarios even 100% correct classification can be reached.
 - Lunch Meeting 2 : 100%
 - Lunch Meeting 1 : 96%
 - Lunch Meeting 3 : 95%
-- Edge Cases L 80%
+- Edge Cases : 80%
 
 ## Further Queries
 
